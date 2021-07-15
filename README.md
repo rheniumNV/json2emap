@@ -3,6 +3,27 @@
 Json を emap 形式に変換します。
 emap とは NeosVR でパースしやすいように考えて作ったデータ形式です。
 
+## 使い方
+
+```
+npm install git+https://github.com/rheniumNV/json2emap.git
+```
+
+```
+const json2emap = require("emap");
+
+console.log(json2emap([1, 2, 3]));
+
+console.log(json2emap({ a: 123, b: "Hello", c: "World" }));
+
+console.log(
+  json2emap({
+    a: ["Hello", "World"],
+    b: [{ c: 1, d: 2 }],
+  })
+);
+```
+
 # emap
 
 ## サンプル Json
