@@ -24,6 +24,14 @@ console.log(
 );
 ```
 
+出力
+
+```
+l$#4$#v.0$#1$#k.0$#0$#t.0$#number$#v.1$#2$#k.1$#1$#t.1$#number$#v.2$#3$#k.2$#2$#t.2$#number$#v.3$#3$#k.3$#length$#t.3$#number$#
+l$#3$#v.0$#123$#k.0$#a$#t.0$#number$#v.1$#Hello$#k.1$#b$#t.1$#string$#v.2$#World$#k.2$#c$#t.2$#string$#
+l$#6$#v.0$#Hello$#k.0$#a_0_$#t.0$#string$#v.1$#World$#k.1$#a_1_$#t.1$#string$#v.2$#2$#k.2$#a.length$#t.2$#number$#v.3$#1$#k.3$#b_0_.c$#t.3$#number$#v.4$#2$#k.4$#b_0_.d$#t.4$#number$#v.5$#1$#k.5$#b.length$#t.5$#number$#
+```
+
 # emap
 
 ## サンプル Json
