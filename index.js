@@ -54,9 +54,9 @@ module.exports = (json, { resolveTypeFunc = resolveType } = {}) => {
       list,
       (prev, { v, k, t }, index) => ({
         ...prev,
-        [resolveKey("v", index)]: v,
-        [resolveKey("k", index)]: k,
-        [resolveKey("t", index)]: t,
+        [format("v%s", index)]: v,
+        [format("k%s", index)]: k,
+        [format("t%s", index)]: t,
       }),
       {}
     ),
