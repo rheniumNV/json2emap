@@ -8,13 +8,19 @@ const resolveKey = (prefix, key) =>
   prefix ? format("%s.%s", prefix, key) : key;
 
 const resolveArrayKey = (prefix, key) =>
-  prefix ? format("%s_%s_", prefix, key) : key;
+  prefix ? format("%s_%s_", prefix, key) : format("_%s_", key);
 
 const resolveIterator = (func, resolveKeyFunc, json, prefix) =>
   _.flatMap(json, (value, key) => func(value, resolveKeyFunc(prefix, key)));
 
 const resolveType = (value) =>
-  _.isNumber(value) ? "number" : _.isString(value) ? "string" : "any";
+  _.isNumber(value)
+    ? "number"
+    : _.isString(value)
+    ? "string"
+    : _.isBoolean(value)
+    ? "bool"
+    : "any";
 
 const resolveValue = (
   value,
@@ -32,13 +38,13 @@ const resolveMap = (json, key = "", resolveTypeFunc) => {
     ? resolveIterator(resolveMap, resolveKey, json, key)
     : isArray(json)
     ? [
-        ...resolveIterator(resolveMap, resolveArrayKey, json, key),
         resolveValue(
           _.size(json),
           resolveKey(key, "length"),
           "number",
           resolveTypeFunc
         ),
+        ...resolveIterator(resolveMap, resolveArrayKey, json, key),
       ]
     : resolveValue(json, key, resolveTypeFunc);
 };
