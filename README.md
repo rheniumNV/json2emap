@@ -8,7 +8,7 @@ emap は NeosVR でパースしやすいように考えて作ったデータ形�
 ## 使い方
 
 ```
-npm install git+https://github.com/rheniumNV/json2emap.git
+npm install json2emap
 ```
 
 ```
