@@ -1,14 +1,12 @@
 const _ = require("lodash");
-const { format } = require("util");
 
-const isArray = (json) => _.isArray(json);
+const isArray = (json) => Array.isArray(json);
 const isMap = (json) => _.isPlainObject(json);
 
-const resolveKey = (prefix, key) =>
-  prefix ? format("%s.%s", prefix, key) : key;
+const resolveKey = (prefix, key) => (prefix ? `${prefix}.${key}` : key);
 
 const resolveArrayKey = (prefix, key) =>
-  prefix ? format("%s_%s_", prefix, key) : format("_%s_", key);
+  prefix ? `${prefix}_${key}_` : `_${key}_`;
 
 const resolveIterator = (func, resolveKeyFunc, json, prefix) =>
   _.flatMap(json, (value, key) => func(value, resolveKeyFunc(prefix, key)));
@@ -28,7 +26,7 @@ const resolveValue = (
   overRideType,
   resolveTypeFunc = resolveType
 ) => ({
-  v: value,
+  v: value === null ? "null" : value,
   k: key,
   t: overRideType ? overRideType : resolveTypeFunc(value),
 });
@@ -39,7 +37,7 @@ const resolveMap = (json, key = "", resolveTypeFunc) => {
     : isArray(json)
     ? [
         resolveValue(
-          _.size(json),
+          Object.keys(json).length,
           resolveKey(key, "length"),
           "number",
           resolveTypeFunc
@@ -50,28 +48,15 @@ const resolveMap = (json, key = "", resolveTypeFunc) => {
 };
 
 const escapeValue = (value) =>
-  _.replace(_.replace(format(value), "\\", "\\\\"), "$#", "$#");
+  _.replace(_.replace(value, /\\/g, "\\\\"), /\$#/g, "$\\#");
 
 module.exports = (json, { resolveTypeFunc = resolveType } = {}) => {
   const list = resolveMap(json, undefined, resolveTypeFunc);
-  const elist = {
-    l: _.size(list),
-    ..._.reduce(
-      list,
-      (prev, { v, k, t }, index) => ({
-        ...prev,
-        [format("v%s", index)]: v,
-        [format("k%s", index)]: k,
-        [format("t%s", index)]: t,
-      }),
-      {}
-    ),
-  };
-  const result = _.join(
-    _.map(elist, (value, key) =>
-      format("%s$#%s$#", key, _.replace(escapeValue(value)))
-    ),
-    ""
-  );
+  let result = `l$#${Object.keys(list).length}$#`;
+  list.forEach(({ v, k, t }, index) => {
+    result += `v${index}$#${escapeValue(v)}$#k${index}$#${escapeValue(
+      k
+    )}$#t${index}$#${escapeValue(t)}$#`;
+  });
   return result;
 };
