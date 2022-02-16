@@ -16,6 +16,21 @@ test("J2E", () => {
   );
 });
 
+test("J2E-copy", () => {
+  expect(
+    json2emap({
+      id: 123,
+      name: "rhenium",
+      sns: [
+        { type: "twitter", id: "@rhenium_vrc" },
+        { type: "discord", id: "rhenium_75_#1015" },
+      ],
+    })
+  ).toEqual(
+    "l$#7$#v0$#123$#k0$#id$#t0$#number$#v1$#rhenium$#k1$#name$#t1$#string$#v2$#2$#k2$#sns.length$#t2$#number$#v3$#twitter$#k3$#sns_0_.type$#t3$#string$#v4$#@rhenium_vrc$#k4$#sns_0_.id$#t4$#string$#v5$#discord$#k5$#sns_1_.type$#t5$#string$#v6$#rhenium_75_#1015$#k6$#sns_1_.id$#t6$#string$#"
+  );
+});
+
 test("J2E-escape", () => {
   expect(
     json2emap({
