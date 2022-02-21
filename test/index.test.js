@@ -12,7 +12,7 @@ test("J2E", () => {
       ],
     })
   ).toEqual(
-    "l$#7$#v0$#123$#k0$#id$#t0$#number$#v1$#rhenium$#k1$#name$#t1$#string$#v2$#2$#k2$#sns.length$#t2$#number$#v3$#twitter$#k3$#sns_0_.type$#t3$#string$#v4$#@rhenium_vrc$#k4$#sns_0_.id$#t4$#string$#v5$#discord$#k5$#sns_1_.type$#t5$#string$#v6$#rhenium_75_#1015$#k6$#sns_1_.id$#t6$#string$#"
+    "l$#7$#$#k0v0$#123$#id$#t0$#number$#$#k1v1$#rhenium$#name$#t1$#string$#$#k2v2$#2$#sns.length$#t2$#number$#$#k3v3$#twitter$#sns_0_.type$#t3$#string$#$#k4v4$#@rhenium_vrc$#sns_0_.id$#t4$#string$#$#k5v5$#discord$#sns_1_.type$#t5$#string$#$#k6v6$#rhenium_75_#1015$#sns_1_.id$#t6$#string$#"
   );
 });
 
@@ -27,7 +27,7 @@ test("J2E-copy", () => {
       ],
     })
   ).toEqual(
-    "l$#7$#v0$#123$#k0$#id$#t0$#number$#v1$#rhenium$#k1$#name$#t1$#string$#v2$#2$#k2$#sns.length$#t2$#number$#v3$#twitter$#k3$#sns_0_.type$#t3$#string$#v4$#@rhenium_vrc$#k4$#sns_0_.id$#t4$#string$#v5$#discord$#k5$#sns_1_.type$#t5$#string$#v6$#rhenium_75_#1015$#k6$#sns_1_.id$#t6$#string$#"
+    "l$#7$#$#k0v0$#123$#id$#t0$#number$#$#k1v1$#rhenium$#name$#t1$#string$#$#k2v2$#2$#sns.length$#t2$#number$#$#k3v3$#twitter$#sns_0_.type$#t3$#string$#$#k4v4$#@rhenium_vrc$#sns_0_.id$#t4$#string$#$#k5v5$#discord$#sns_1_.type$#t5$#string$#$#k6v6$#rhenium_75_#1015$#sns_1_.id$#t6$#string$#"
   );
 });
 
@@ -42,7 +42,7 @@ test("J2E-escape", () => {
       ],
     })
   ).toEqual(
-    "l$#7$#v0$#123$#k0$#id$#t0$#number$#v1$#rhenium$\\#$#k1$#\\\\name$#t1$#string$#v2$#2$#k2$#sns.length$#t2$#number$#v3$#twitter$#k3$#sns_0_.type$#t3$#string$#v4$#@rhenium_vrc$#k4$#sns_0_.id$#t4$#string$#v5$#discord$#k5$#sns_1_.type$#t5$#string$#v6$#rhenium_75_#1015$#k6$#sns_1_.id$#t6$#string$#"
+    "l$#7$#$#k0v0$#123$#id$#t0$#number$#$#k1v1$#rhenium$\\#$#\\\\name$#t1$#string$#$#k2v2$#2$#sns.length$#t2$#number$#$#k3v3$#twitter$#sns_0_.type$#t3$#string$#$#k4v4$#@rhenium_vrc$#sns_0_.id$#t4$#string$#$#k5v5$#discord$#sns_1_.type$#t5$#string$#$#k6v6$#rhenium_75_#1015$#sns_1_.id$#t6$#string$#"
   );
 });
 
@@ -57,13 +57,13 @@ test("J2E-escape-multi", () => {
       ],
     })
   ).toEqual(
-    "l$#7$#v0$#123$#k0$#id$#t0$#number$#v1$#rhenium$\\#$#k1$#\\\\name$#t1$#string$#v2$#2$#k2$#sns.length$#t2$#number$#v3$#twitter$#k3$#sns_0_.typ\\\\e\\\\$#t3$#string$#v4$#@r$\\#he$\\#nium_vrc$#k4$#sns_0_.id$#t4$#string$#v5$#discord$#k5$#sns_1_.type$#t5$#string$#v6$#rhenium_75_#1015$#k6$#sns_1_.id$#t6$#string$#"
+    "l$#7$#$#k0v0$#123$#id$#t0$#number$#$#k1v1$#rhenium$\\#$#\\\\name$#t1$#string$#$#k2v2$#2$#sns.length$#t2$#number$#$#k3v3$#twitter$#sns_0_.typ\\\\e\\\\$#t3$#string$#$#k4v4$#@r$\\#he$\\#nium_vrc$#sns_0_.id$#t4$#string$#$#k5v5$#discord$#sns_1_.type$#t5$#string$#$#k6v6$#rhenium_75_#1015$#sns_1_.id$#t6$#string$#"
   );
 });
 
 test("J2E-return-whitespace", () => {
   expect(json2emap({ id: "\n \n" })).toEqual(
-    "l$#1$#v0$#\n \n$#k0$#id$#t0$#string$#"
+    "l$#1$#$#k0v0$#\n \n$#id$#t0$#string$#"
   );
 });
 
