@@ -54,7 +54,7 @@ module.exports = (json, { resolveTypeFunc = resolveType } = {}) => {
   const list = resolveMap(json, undefined, resolveTypeFunc);
   let result = `l$#${Object.keys(list).length}$#`;
   list.forEach(({ v, k, t }, index) => {
-    result += `v${index}$#${escapeValue(v)}$#k${index}$#${escapeValue(
+    result += `$#k${index}v${index}$#${escapeValue(v)}$#${escapeValue(
       k
     )}$#t${index}$#${escapeValue(t)}$#`;
   });
