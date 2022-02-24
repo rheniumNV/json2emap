@@ -52,10 +52,10 @@ const escapeValue = (value) =>
 
 module.exports = (json, { resolveTypeFunc = resolveType } = {}) => {
   const list = resolveMap(json, undefined, resolveTypeFunc);
-  let result = `l$#${Object.keys(list).length}$#`;
+  let result = `l$#${Object.keys(list).length}$#v$#`;
   list.forEach(({ v, k, t }, index) => {
-    result += `v${index}$#${escapeValue(v)}$#k${index}$#${escapeValue(
-      k
+    result += `k${index}$#${escapeValue(k)}$#v${index}$#${escapeValue(
+      v
     )}$#t${index}$#${escapeValue(t)}$#`;
   });
   return result;
