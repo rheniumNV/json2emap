@@ -1,7 +1,7 @@
-const _ = require("lodash");
+const { replace, isPlainObject } = require("lodash");
 
 const isArray = (json) => Array.isArray(json);
-const isMap = (json) => _.isPlainObject(json);
+const isMap = (json) => isPlainObject;
 
 const resolveKey = (prefix, key) => (prefix ? `${prefix}.${key}` : key);
 
@@ -48,14 +48,14 @@ const resolveMap = (json, key = "", resolveTypeFunc) => {
 };
 
 const escapeValue = (value) =>
-  _.replace(_.replace(value, /\\/g, "\\\\"), /\$#/g, "$\\#");
+  replace(replace(value, /\\/g, "\\\\"), /\$#/g, "$\\#");
 
 module.exports = (json, { resolveTypeFunc = resolveType } = {}) => {
   const list = resolveMap(json, undefined, resolveTypeFunc);
-  let result = `l$#${Object.keys(list).length}$#`;
+  let result = `l$#${Object.keys(list).length}$#v$#`;
   list.forEach(({ v, k, t }, index) => {
-    result += `$#k${index}v${index}$#${escapeValue(v)}$#${escapeValue(
-      k
+    result += `k${index}$#${escapeValue(k)}$#v${index}$#${escapeValue(
+      v
     )}$#t${index}$#${escapeValue(t)}$#`;
   });
   return result;
