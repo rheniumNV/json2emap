@@ -36,6 +36,17 @@ l$#3$#v$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#Wo
 l$#6$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
 ```
 
+### ES Modules / TypeScript
+
+```js
+import json2emap from "json2emap";
+// or: import { json2emap } from "json2emap";
+
+json2emap({ a: 123 });
+```
+
+Types (`Options`, `ResolveTypeFunc`) are included. CommonJS `require("json2emap")` keeps working as before.
+
 ## Options
 
 ### resolveTypeFunc
@@ -50,6 +61,17 @@ json2emap(
   { resolveTypeFunc: (v) => (typeof v === "number" ? "float" : "string") }
 );
 // l$#3$#v$#k0$#a$#v0$#1.5$#t0$#float$#k1$#b.length$#v1$#1$#t1$#number$#k2$#b_0_$#v2$#1$#t2$#float$#
+```
+
+The default resolver is exported as `defaultResolveType`, so you can extend it:
+
+```js
+import { defaultResolveType } from "json2emap";
+
+json2emap(data, {
+  resolveTypeFunc: (v) =>
+    v instanceof Date ? "dateTime" : defaultResolveType(v),
+});
 ```
 
 ## Notes
