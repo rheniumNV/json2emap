@@ -1,14 +1,21 @@
 {
   "name": "json2emap",
-  "version": "0.2.0",
-  "description": "Convert JSON to Emap, a format that is easy to parse in NeosVR.",
+  "version": "0.2.1",
+  "description": "Convert JSON to Emap, a format that is easy to parse in Resonite.",
   "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "test": "jest",
-    "fix:format": "prettier --write **/*.{js,json,css}"
-  },
-  "dependencies": {
-    "lodash": "^4.17.21"
+    "fix:format": "prettier --write \"**/*.{js,ts,json,md,yml}\"",
+    "check:format": "prettier --check \"**/*.{js,ts,json,md,yml}\""
   },
   "devDependencies": {
     "prettier": "^2.3.2",
@@ -19,10 +26,15 @@
     "url": "git+https://github.com/rheniumNV/json2emap.git"
   },
   "keywords": [
+    "resonite",
     "neos",
     "neosvr",
     "emap"
   ],
   "author": "rhenium_nv",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rheniumNV/json2emap/issues"
+  },
+  "homepage": "https://github.com/rheniumNV/json2emap#readme"
 }

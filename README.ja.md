@@ -3,7 +3,7 @@
 # json2emap
 
 Json を Emap 文字列に変換します。
-Emap は [Neos Metaverse](https://neos.com/) でパースしやすいように考えて作ったデータ形式です。
+Emap は [Resonite](https://resonite.com/) でパースしやすいように設計した独自のデータ形式です。
 
 ## 使い方
 
@@ -11,7 +11,7 @@ Emap は [Neos Metaverse](https://neos.com/) でパースしやすいように�
 npm install json2emap
 ```
 
-sample..s
+サンプル
 
 ```
 const json2emap = require("json2emap");
@@ -32,22 +32,45 @@ Output
 
 ```
 l$#4$#v$#k0$#length$#v0$#3$#t0$#number$#k1$#_0_$#v1$#1$#t1$#number$#k2$#_1_$#v2$#2$#t2$#number$#k3$#_2_$#v3$#3$#t3$#number$#
-l$#3$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World$#t2$#string$#
-l$#6$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
+l$#3$#v$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World$#t2$#string$#
+l$#6$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
 ```
 
-## Neos での Emap の使い方
+## オプション
 
-Emap 文字列の Neos 内での利用方法は主に 2 種類あります。
+### resolveTypeFunc
+
+各値の型名（`t`）を決める関数です。
+デフォルトでは数値は `number`、文字列は `string`、真偽値は `bool`、それ以外は `any` になります。
+配列の `length` は常に `number` です。
+
+```js
+json2emap(
+  { a: 1.5, b: [1] },
+  { resolveTypeFunc: (v) => (typeof v === "number" ? "float" : "string") }
+);
+// l$#3$#v$#k0$#a$#v0$#1.5$#t0$#float$#k1$#b.length$#v1$#1$#t1$#number$#k2$#b_0_$#v2$#1$#t2$#float$#
+```
+
+## 注意事項
+
+- 空のオブジェクトは何も出力しません（`{ a: {} }` → `l$#0$#v$#`）。空の配列は `length`（`0`）のみ出力します。
+- キー内の `.` や `_n_` はエスケープされないため、`{ "a.b": 1 }` と `{ a: { b: 1 } }` は同じキーになります。
+- JSON でない値（`Date`、`Map`、`BigInt` など）は `String()` で文字列化され、型は `any` になります。`undefined` は空文字、`null` は `"null"`（型 `any`）になります。
+- ルートにプリミティブ値を渡した場合（例: `json2emap(5)`）は、キーが空文字の 1 エントリになります。
+
+## Resonite での Emap の使い方
+
+Emap 文字列の Resonite 内での利用方法は主に 2 種類あります。
 DynamicVariable を利用するほうが機械的に処理できるためおすすめです。
 
 - DynamicVariable を利用する
 - 文字列から直接取り出す
 
 パブリックフォルダにサンプルが置いてあります。
-（以下のリンクを Neos 内でペーストするとパブリックフォルダとして出てきます。）
+（以下のリンクを Resonite 内でペーストするとパブリックフォルダとして出てきます。）
 
-> neosrec:///G-Shared-Project-rheni/R-166bcbdf-331a-4abc-9f27-8604bbf0de47
+> resrec:///G-Shared-Project-rheni/R-166bcbdf-331a-4abc-9f27-8604bbf0de47
 
 ### DynamicVariable を利用する
 
@@ -91,7 +114,7 @@ DynamicVariable からの読み込み
 
 全てのパスを列挙します。
 リストには length を追加し、それぞれのパスは hoge[0] ではなく hoge_0\_ と表現します。
-（Neos の DynamicVariable のキーには[]が使えないためです。）
+（Resonite の DynamicVariable のキーには[]が使えないためです。）
 
 ```
 [
@@ -270,3 +293,8 @@ l$#8$#v$#k0$#id$#v0$#123$#t0$#number$#k1$#name$#v1$#rhenium$#t1$#string$#k2$#isP
 }
 -> k0$#\\test$#v0$#$\#value$#
 ```
+
+## 生成 AI の利用について
+
+このプロジェクトのコードやドキュメントの一部は、生成 AI ツールの支援を受けて作成しています。
+すべての変更はメンテナーがレビュー・テストしたうえでリリースしています。
