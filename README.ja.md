@@ -7,14 +7,16 @@ Emap は [Resonite](https://resonite.com/) でパースしやすいように設�
 
 ## 使い方
 
-```
+```sh
 npm install json2emap
 ```
 
 サンプル
 
-```
-const json2emap = require("json2emap");
+```js
+import json2emap from "json2emap";
+// 名前付きでも読み込めます: import { json2emap } from "json2emap";
+// CommonJS の場合: const json2emap = require("json2emap");
 
 console.log(json2emap([1, 2, 3]));
 
@@ -30,22 +32,13 @@ console.log(
 
 Output
 
-```
+```text
 l$#4$#v$#k0$#length$#v0$#3$#t0$#number$#k1$#_0_$#v1$#1$#t1$#number$#k2$#_1_$#v2$#2$#t2$#number$#k3$#_2_$#v3$#3$#t3$#number$#
 l$#3$#v$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World$#t2$#string$#
 l$#6$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
 ```
 
-### ES Modules / TypeScript
-
-```js
-import json2emap from "json2emap";
-// または: import { json2emap } from "json2emap";
-
-json2emap({ a: 123 });
-```
-
-型定義（`Options`、`ResolveTypeFunc`）が同梱されています。CommonJS の `require("json2emap")` もこれまでどおり使えます。
+TypeScript の型定義も同梱しています。
 
 ## オプション
 
@@ -80,6 +73,17 @@ json2emap(data, {
 - キー内の `.` や `_n_` はエスケープされないため、`{ "a.b": 1 }` と `{ a: { b: 1 } }` は同じキーになります。
 - JSON でない値（`Date`、`Map`、`BigInt` など）は `String()` で文字列化され、型は `any` になります。`undefined` は空文字、`null` は `"null"`（型 `any`）になります。
 - ルートにプリミティブ値を渡した場合（例: `json2emap(5)`）は、キーが空文字の 1 エントリになります。
+
+## v0.x からの移行
+
+- 出力される Emap 文字列は 0.2.1 と同じなので、Resonite 側の変更は不要です。
+- `require("json2emap")` はこれまでどおり関数を返すため、CommonJS のコードはそのまま動きます。
+- ES Modules（`import json2emap from "json2emap"` / `import { json2emap } from "json2emap"`）に対応しました。
+- パッケージのルート以外は読み込めなくなりました。`require("json2emap/index.js")` のようにファイルを直接指定していた場合は、`require("json2emap")` に変更してください。
+- TypeScript: オプションの型名が `Options` になりました。`IOption` も引き続き使えますが、非推奨です。
+- デフォルトの型判定関数を `defaultResolveType` として公開しました。
+
+古いバージョンを含む変更の一覧は [CHANGELOG.md](CHANGELOG.md) を参照してください。
 
 ## Resonite での Emap の使い方
 

@@ -7,14 +7,16 @@ Emap is a data format designed to be easily parsed in [Resonite](https://resonit
 
 ## How to use
 
-```
+```sh
 npm install json2emap
 ```
 
 Sample
 
-```
-const json2emap = require("json2emap");
+```js
+import json2emap from "json2emap";
+// Named import is also available: import { json2emap } from "json2emap";
+// CommonJS: const json2emap = require("json2emap");
 
 console.log(json2emap([1, 2, 3]));
 
@@ -30,22 +32,13 @@ console.log(
 
 Output
 
-```
+```text
 l$#4$#v$#k0$#length$#v0$#3$#t0$#number$#k1$#_0_$#v1$#1$#t1$#number$#k2$#_1_$#v2$#2$#t2$#number$#k3$#_2_$#v3$#3$#t3$#number$#
 l$#3$#v$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World$#t2$#string$#
 l$#6$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
 ```
 
-### ES Modules / TypeScript
-
-```js
-import json2emap from "json2emap";
-// or: import { json2emap } from "json2emap";
-
-json2emap({ a: 123 });
-```
-
-Types (`Options`, `ResolveTypeFunc`) are included. CommonJS `require("json2emap")` keeps working as before.
+TypeScript type definitions are included.
 
 ## Options
 
@@ -80,6 +73,17 @@ json2emap(data, {
 - `.` and `_n_` in keys are not escaped, so `{ "a.b": 1 }` and `{ a: { b: 1 } }` produce the same key.
 - Values that are not JSON (`Date`, `Map`, `BigInt`, ...) are converted with `String()` and typed as `any`. `undefined` becomes an empty string. `null` becomes `"null"` (type `any`).
 - A primitive root value (e.g. `json2emap(5)`) produces a single entry with an empty key.
+
+## Migrating from v0.x
+
+- The output (Emap string) is the same as 0.2.1, so no changes are needed on the Resonite side.
+- `require("json2emap")` still returns the function, so existing CommonJS code works as is.
+- ES Modules (`import json2emap from "json2emap"` / `import { json2emap } from "json2emap"`) are now supported.
+- Only the package root can be imported. If you imported a file directly (e.g. `require("json2emap/index.js")`), change it to `require("json2emap")`.
+- TypeScript: the option type is now `Options`. `IOption` still works but is deprecated.
+- The default type resolver is now exported as `defaultResolveType`.
+
+See [CHANGELOG.md](CHANGELOG.md) for all changes, including those in older versions.
 
 ## How to use Emap in Resonite
 
