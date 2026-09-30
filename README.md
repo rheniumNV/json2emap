@@ -292,3 +292,8 @@ It is now complete.
 }
 -> k0$#\\test$#v0$#$\#value$#
 ```
+
+## Use of generative AI
+
+Parts of the code and documentation in this project were created with the assistance of generative AI tools.
+All changes are reviewed and tested by the maintainer before release.
