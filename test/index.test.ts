@@ -1,6 +1,9 @@
-const json2emap = require("../index");
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import json2emap, {
+  defaultResolveType,
+  json2emap as named,
+} from "../src/index";
 
 test("J2E", () => {
   expect(
@@ -72,7 +75,9 @@ test("J2E-return-whitespace", () => {
   );
 });
 
-const json1 = require("./test1.json");
+const json1 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "test1.json")).toString()
+);
 const json1res = fs
   .readFileSync(path.join(__dirname, "test1.result"))
   .toString();
@@ -82,7 +87,7 @@ test("J2E-2", () => {
 });
 
 describe("resolveTypeFunc option", () => {
-  const resolveTypeFunc = (value) =>
+  const resolveTypeFunc = (value: unknown) =>
     typeof value === "number" ? "float" : "string";
 
   test("applies to nested values", () => {
@@ -134,10 +139,39 @@ describe("value types", () => {
   });
 });
 
-describe("objects", () => {
-  test("an object with a numeric length key is not treated as array-like", () => {
-    expect(json2emap({ a: { length: 2, b: 1 } })).toEqual(
-      "l$#2$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a.b$#v1$#1$#t1$#number$#"
+describe("nested structures", () => {
+  test("nested array", () => {
+    expect(json2emap([1, [2, [3, [4]]]])).toEqual(
+      "l$#8$#v$#k0$#length$#v0$#2$#t0$#number$#k1$#_0_$#v1$#1$#t1$#number$#k2$#_1_.length$#v2$#2$#t2$#number$#k3$#_1__0_$#v3$#2$#t3$#number$#k4$#_1__1_.length$#v4$#2$#t4$#number$#k5$#_1__1__0_$#v5$#3$#t5$#number$#k6$#_1__1__1_.length$#v6$#1$#t6$#number$#k7$#_1__1__1__0_$#v7$#4$#t7$#number$#"
+    );
+  });
+
+  test("nested object", () => {
+    expect(json2emap({ a: { b: { c: { d: "test" } } } })).toEqual(
+      "l$#1$#v$#k0$#a.b.c.d$#v0$#test$#t0$#string$#"
+    );
+  });
+
+  test("nested array and object", () => {
+    expect(json2emap({ a: [{ b: [{ c: "test" }] }] })).toEqual(
+      "l$#3$#v$#k0$#a.length$#v0$#1$#t0$#number$#k1$#a_0_.b.length$#v1$#1$#t1$#number$#k2$#a_0_.b_0_.c$#v2$#test$#t2$#string$#"
+    );
+  });
+});
+
+describe("non-JSON values (compatible with v0.2)", () => {
+  test("undefined becomes an empty string", () => {
+    expect(json2emap({ a: undefined })).toEqual(
+      "l$#1$#v$#k0$#a$#v0$#$#t0$#any$#"
+    );
+  });
+
+  test("Date, Map and BigInt are stringified as leaf values", () => {
+    const date = new Date(0);
+    expect(json2emap({ d: date, m: new Map(), b: BigInt(10) })).toEqual(
+      `l$#3$#v$#k0$#d$#v0$#${String(
+        date
+      )}$#t0$#any$#k1$#m$#v1$#[object Map]$#t1$#any$#k2$#b$#v2$#10$#t2$#any$#`
     );
   });
 
@@ -147,9 +181,53 @@ describe("objects", () => {
     expect(json2emap(obj)).toEqual("l$#1$#v$#k0$#a$#v0$#1$#t0$#number$#");
   });
 
-  test("non-plain objects are stringified as leaf values", () => {
-    expect(json2emap({ m: new Map(), u: undefined, z: -0 })).toEqual(
-      "l$#3$#v$#k0$#m$#v0$#[object Map]$#t0$#any$#k1$#u$#v1$#$#t1$#any$#k2$#z$#v2$#-0$#t2$#number$#"
+  test("-0 is kept", () => {
+    expect(json2emap({ a: -0 })).toEqual(
+      "l$#1$#v$#k0$#a$#v0$#-0$#t0$#number$#"
     );
   });
+});
+
+describe("objects", () => {
+  test("an object with a numeric length key is not treated as array-like", () => {
+    expect(json2emap({ a: { length: 2, b: 1 } })).toEqual(
+      "l$#2$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a.b$#v1$#1$#t1$#number$#"
+    );
+  });
+
+  test("boxed primitives keep their types (compatible with v0.2)", () => {
+    expect(
+      // eslint-disable-next-line no-new-wrappers
+      json2emap({ n: new Number(1), s: new String("a"), b: new Boolean(true) })
+    ).toEqual(
+      "l$#3$#v$#k0$#n$#v0$#1$#t0$#number$#k1$#s$#v1$#a$#t1$#string$#k2$#b$#v2$#true$#t2$#bool$#"
+    );
+  });
+});
+
+describe("exports", () => {
+  test("default and named exports are the same function", () => {
+    expect(named).toBe(json2emap);
+  });
+
+  test("defaultResolveType", () => {
+    expect(defaultResolveType(1)).toBe("number");
+    expect(defaultResolveType("a")).toBe("string");
+    expect(defaultResolveType(true)).toBe("bool");
+    expect(defaultResolveType(null)).toBe("any");
+  });
+
+  test("option can be omitted or undefined", () => {
+    expect(json2emap({ a: 1 }, undefined)).toEqual(json2emap({ a: 1 }));
+  });
+});
+
+test("large input is processed in linear time", () => {
+  const big = {
+    a: Array.from({ length: 50000 }, (_, i) => ({ i, s: "x" })),
+  };
+  const start = Date.now();
+  const result = json2emap(big);
+  expect(result.startsWith("l$#100001$#v$#")).toBe(true);
+  expect(Date.now() - start).toBeLessThan(2000);
 });

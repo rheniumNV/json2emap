@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "node16",
+    "moduleResolution": "node16",
+    "strict": true,
+    "noEmit": true,
+    "types": [],
+    "lib": ["ES2020"]
+  },
+  "files": ["types-cjs.cts", "types-esm.mts"]
+}
