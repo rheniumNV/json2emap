@@ -133,3 +133,23 @@ describe("value types", () => {
     );
   });
 });
+
+describe("objects", () => {
+  test("an object with a numeric length key is not treated as array-like", () => {
+    expect(json2emap({ a: { length: 2, b: 1 } })).toEqual(
+      "l$#2$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a.b$#v1$#1$#t1$#number$#"
+    );
+  });
+
+  test("objects with null prototype are treated as objects", () => {
+    const obj = Object.create(null);
+    obj.a = 1;
+    expect(json2emap(obj)).toEqual("l$#1$#v$#k0$#a$#v0$#1$#t0$#number$#");
+  });
+
+  test("non-plain objects are stringified as leaf values", () => {
+    expect(json2emap({ m: new Map(), u: undefined, z: -0 })).toEqual(
+      "l$#3$#v$#k0$#m$#v0$#[object Map]$#t0$#any$#k1$#u$#v1$#$#t1$#any$#k2$#z$#v2$#-0$#t2$#number$#"
+    );
+  });
+});

@@ -7,9 +7,11 @@
 - `resolveTypeFunc` option is now applied to every value. Previously it was ignored for nested values.
 - Passing a primitive value as the root (e.g. `json2emap(5)`) no longer throws.
 - `length` of sparse arrays now matches the number of emitted elements.
+- An object with a numeric `length` property (e.g. `{ length: 2, b: 1 }`) was treated as array-like and its other keys were dropped. It is now treated as a normal object.
 
 ### Changed
 
+- Removed the `lodash` dependency. The package now has no runtime dependencies.
 - The published package now contains only the library files (tests and fixtures are no longer included).
 - Improved TypeScript types for the options.
 - README: updated for Resonite, fixed sample output, documented options and edge cases.

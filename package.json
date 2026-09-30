@@ -17,9 +17,6 @@
     "fix:format": "prettier --write \"**/*.{js,ts,json,md,yml}\"",
     "check:format": "prettier --check \"**/*.{js,ts,json,md,yml}\""
   },
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
   "devDependencies": {
     "prettier": "^2.3.2",
     "jest": "^27.5.1"
