@@ -1,12 +1,13 @@
 {
   "name": "json2emap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Convert JSON to Emap, a format that is easy to parse in Resonite.",
   "main": "index.js",
   "types": "index.d.ts",
   "files": [
     "index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": ">=12"
