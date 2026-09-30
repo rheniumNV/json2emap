@@ -3,7 +3,7 @@
 # json2emap
 
 Json を Emap 文字列に変換します。
-Emap は [Neos Metaverse](https://neos.com/) でパースしやすいように考えて作ったデータ形式です。
+Emap は [Resonite](https://resonite.com/) でパースしやすいように設計した独自のデータ形式です。
 
 ## 使い方
 
@@ -36,18 +36,18 @@ l$#3$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World
 l$#6$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
 ```
 
-## Neos での Emap の使い方
+## Resonite での Emap の使い方
 
-Emap 文字列の Neos 内での利用方法は主に 2 種類あります。
+Emap 文字列の Resonite 内での利用方法は主に 2 種類あります。
 DynamicVariable を利用するほうが機械的に処理できるためおすすめです。
 
 - DynamicVariable を利用する
 - 文字列から直接取り出す
 
 パブリックフォルダにサンプルが置いてあります。
-（以下のリンクを Neos 内でペーストするとパブリックフォルダとして出てきます。）
+（以下のリンクを Resonite 内でペーストするとパブリックフォルダとして出てきます。）
 
-> neosrec:///G-Shared-Project-rheni/R-166bcbdf-331a-4abc-9f27-8604bbf0de47
+> resrec:///G-Shared-Project-rheni/R-166bcbdf-331a-4abc-9f27-8604bbf0de47
 
 ### DynamicVariable を利用する
 
@@ -91,7 +91,7 @@ DynamicVariable からの読み込み
 
 全てのパスを列挙します。
 リストには length を追加し、それぞれのパスは hoge[0] ではなく hoge_0\_ と表現します。
-（Neos の DynamicVariable のキーには[]が使えないためです。）
+（Resonite の DynamicVariable のキーには[]が使えないためです。）
 
 ```
 [

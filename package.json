@@ -1,7 +1,7 @@
 {
   "name": "json2emap",
   "version": "0.2.0",
-  "description": "Convert JSON to Emap, a format that is easy to parse in NeosVR.",
+  "description": "Convert JSON to Emap, a format that is easy to parse in Resonite.",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -19,6 +19,7 @@
     "url": "git+https://github.com/rheniumNV/json2emap.git"
   },
   "keywords": [
+    "resonite",
     "neos",
     "neosvr",
     "emap"
