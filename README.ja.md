@@ -133,8 +133,6 @@ DynamicVariable からの読み込み
 
 ![Emap 文字列からキーを指定して値を直接取り出す ProtoFlux](doc/images/read_directly.png)
 
-※0.2.0 よりも古いバージョンの Emap 文字列では Key と Value の順番が違うためこの方法では読み込めません。
-
 ## Json から Emap に変換される手順
 
 以下の JSON を変換してみます。
