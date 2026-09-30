@@ -14,7 +14,6 @@ export type IOption = Options;
 
 type Entry = { k: string; v: string; t: string };
 
-/** The default type resolver: number -> "number", string -> "string", boolean -> "bool", others -> "any". */
 const toTag = (value: unknown): string => Object.prototype.toString.call(value);
 
 const isBoxed = (value: unknown, tag: string): boolean =>

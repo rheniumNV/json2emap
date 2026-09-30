@@ -59,12 +59,15 @@ json2emap(
 The default resolver is exported as `defaultResolveType`, so you can extend it:
 
 ```js
-import { defaultResolveType } from "json2emap";
+import json2emap, { defaultResolveType } from "json2emap";
 
-json2emap(data, {
-  resolveTypeFunc: (v) =>
-    v instanceof Date ? "dateTime" : defaultResolveType(v),
-});
+json2emap(
+  { createdAt: new Date() },
+  {
+    resolveTypeFunc: (v) =>
+      v instanceof Date ? "dateTime" : defaultResolveType(v),
+  }
+);
 ```
 
 ## Notes
