@@ -100,6 +100,10 @@ Emap 文字列の Resonite 内での利用方法は主に 3 種類あります�
 
 > resrec:///G-Shared-Project-rheni/R-166bcbdf-331a-4abc-9f27-8604bbf0de47
 
+※ 0.2.0 未満のバージョンで生成した Emap 文字列は Key と Value の順番が異なるため、最新のパーサーでは読み込めません。
+その場合は DynamicVariable を利用する方法のみ使えます。旧バージョン用のパーサーはパブリックフォルダ内の `/Legacy` に入っています。
+可能であれば json2emap を最新バージョンに更新することをおすすめします。
+
 ### Dictionary を利用する
 
 Dictionary への書き込み
