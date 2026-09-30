@@ -8,8 +8,10 @@ const resolveKey = (prefix, key) => (prefix ? `${prefix}.${key}` : key);
 const resolveArrayKey = (prefix, key) =>
   prefix ? `${prefix}_${key}_` : `_${key}_`;
 
-const resolveIterator = (func, resolveKeyFunc, json, prefix) =>
-  _.flatMap(json, (value, key) => func(value, resolveKeyFunc(prefix, key)));
+const resolveIterator = (func, resolveKeyFunc, json, prefix, resolveTypeFunc) =>
+  _.flatMap(json, (value, key) =>
+    func(value, resolveKeyFunc(prefix, key), resolveTypeFunc)
+  );
 
 const resolveType = (value) =>
   _.isNumber(value)
@@ -31,20 +33,26 @@ const resolveValue = (
   t: overRideType ? overRideType : resolveTypeFunc(value),
 });
 
-const resolveMap = (json, key = "", resolveTypeFunc) => {
+const resolveMap = (json, key = "", resolveTypeFunc = resolveType) => {
   return isMap(json)
-    ? resolveIterator(resolveMap, resolveKey, json, key)
+    ? resolveIterator(resolveMap, resolveKey, json, key, resolveTypeFunc)
     : isArray(json)
     ? [
         resolveValue(
-          Object.keys(json).length,
+          json.length,
           resolveKey(key, "length"),
           "number",
           resolveTypeFunc
         ),
-        ...resolveIterator(resolveMap, resolveArrayKey, json, key),
+        ...resolveIterator(
+          resolveMap,
+          resolveArrayKey,
+          json,
+          key,
+          resolveTypeFunc
+        ),
       ]
-    : resolveValue(json, key, resolveTypeFunc);
+    : [resolveValue(json, key, undefined, resolveTypeFunc)];
 };
 
 const escapeValue = (value) =>
@@ -52,7 +60,7 @@ const escapeValue = (value) =>
 
 module.exports = (json, { resolveTypeFunc = resolveType } = {}) => {
   const list = resolveMap(json, undefined, resolveTypeFunc);
-  let result = `l$#${Object.keys(list).length}$#v$#`;
+  let result = `l$#${list.length}$#v$#`;
   list.forEach(({ v, k, t }, index) => {
     result += `k${index}$#${escapeValue(k)}$#v${index}$#${escapeValue(
       v
