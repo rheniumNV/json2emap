@@ -87,32 +87,47 @@ json2emap(data, {
 
 ## Resonite での Emap の使い方
 
-Emap 文字列の Resonite 内での利用方法は主に 2 種類あります。
-DynamicVariable を利用するほうが機械的に処理できるためおすすめです。
+Emap 文字列の Resonite 内での利用方法は主に 3 種類あります。
+基本的には Dictionary を利用する方法が効率的で機械的に処理できるためおすすめです。
+参照したい値がごく一部でキーが分かっている場合は文字列から直接抽出する方法もあります。
 
-- DynamicVariable を利用する
-- 文字列から直接取り出す
+- 全てを Dictionary に書きこんでから利用する
+- 【非推奨】全てを DynamicVariable に書きこんでから利用する
+- 文字列から特定のキーの内容を直接取り出す
 
 パブリックフォルダにサンプルが置いてあります。
 （以下のリンクを Resonite 内でペーストするとパブリックフォルダとして出てきます。）
 
 > resrec:///G-Shared-Project-rheni/R-166bcbdf-331a-4abc-9f27-8604bbf0de47
 
-### DynamicVariable を利用する
+### Dictionary を利用する
+
+Dictionary への書き込み
+
+![Emap 文字列を Dictionary に書き込む ProtoFlux](doc/images/emap_to_dictionary.png)
+
+Dictionary からの読み込み
+
+![Dictionary からキーを指定して値を読み込む ProtoFlux](doc/images/read_from_dictionary.png)
+
+### 【非推奨】DynamicVariable を利用する
+
+Dictionary に比べてパフォーマンスが劣るため、現在は非推奨です。
+Resonite に Dictionary が実装されるまでは主流のやり方でした。
 
 DynamicVariable への書き込み
 
-![](https://user-images.githubusercontent.com/71165146/154020472-0fe7b6f9-b11b-4a4e-969d-84f5943b1747.jpg)
+![Emap 文字列を DynamicVariable に書き込む ProtoFlux](doc/images/emap_to_dynamic_variable.png)
 
 DynamicVariable からの読み込み
 
-![](https://user-images.githubusercontent.com/71165146/154020790-ff6c175a-3e4c-4525-8807-57138b891b13.jpg)
+![DynamicVariable から値を読み込む ProtoFlux](doc/images/read_from_dynamic_variable.png)
 
 ### 文字列から直接取り出す
 
 キーを元に特定の値とその型を取得できます。
 
-![image](https://user-images.githubusercontent.com/71165146/155488876-96c1a261-b3c8-48f4-b50f-91d36132c11d.png)
+![Emap 文字列からキーを指定して値を直接取り出す ProtoFlux](doc/images/read_directly.png)
 
 ※0.2.0 よりも古いバージョンの Emap 文字列では Key と Value の順番が違うためこの方法では読み込めません。
 
