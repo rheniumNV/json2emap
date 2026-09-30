@@ -11,7 +11,7 @@ Emap は [Resonite](https://resonite.com/) でパースしやすいように設�
 npm install json2emap
 ```
 
-sample..s
+サンプル
 
 ```
 const json2emap = require("json2emap");
@@ -32,9 +32,32 @@ Output
 
 ```
 l$#4$#v$#k0$#length$#v0$#3$#t0$#number$#k1$#_0_$#v1$#1$#t1$#number$#k2$#_1_$#v2$#2$#t2$#number$#k3$#_2_$#v3$#3$#t3$#number$#
-l$#3$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World$#t2$#string$#
-l$#6$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
+l$#3$#v$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World$#t2$#string$#
+l$#6$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
 ```
+
+## オプション
+
+### resolveTypeFunc
+
+各値の型名（`t`）を決める関数です。
+デフォルトでは数値は `number`、文字列は `string`、真偽値は `bool`、それ以外は `any` になります。
+配列の `length` は常に `number` です。
+
+```js
+json2emap(
+  { a: 1.5, b: [1] },
+  { resolveTypeFunc: (v) => (typeof v === "number" ? "float" : "string") }
+);
+// l$#3$#v$#k0$#a$#v0$#1.5$#t0$#float$#k1$#b.length$#v1$#1$#t1$#number$#k2$#b_0_$#v2$#1$#t2$#float$#
+```
+
+## 注意事項
+
+- 空のオブジェクトは何も出力しません（`{ a: {} }` → `l$#0$#v$#`）。空の配列は `length`（`0`）のみ出力します。
+- キー内の `.` や `_n_` はエスケープされないため、`{ "a.b": 1 }` と `{ a: { b: 1 } }` は同じキーになります。
+- JSON でない値（`Date`、`Map`、`BigInt` など）は `String()` で文字列化され、型は `any` になります。`undefined` は空文字、`null` は `"null"`（型 `any`）になります。
+- ルートにプリミティブ値を渡した場合（例: `json2emap(5)`）は、キーが空文字の 1 エントリになります。
 
 ## Resonite での Emap の使い方
 
