@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented in this file.
 
-## [1.0.0] - Unreleased
+## [1.0.0] - 2026-10-02
 
 ### Breaking changes
 
@@ -87,7 +87,7 @@ All notable changes to this project are documented in this file.
 
 - Initial release.
 
-[1.0.0]: https://github.com/rheniumNV/json2emap/compare/v0.2.1...HEAD
+[1.0.0]: https://github.com/rheniumNV/json2emap/compare/v0.2.1...v1.0.0
 [0.2.1]: https://github.com/rheniumNV/json2emap/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/rheniumNV/json2emap/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/rheniumNV/json2emap/compare/v0.1.1...v0.1.2
