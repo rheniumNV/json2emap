@@ -20,7 +20,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check:format
+      - run: npm run typecheck
       - run: npm test
+      - run: npm run build
+      - run: npm run test:dist
 
   coverage:
     if: github.event_name == 'pull_request'

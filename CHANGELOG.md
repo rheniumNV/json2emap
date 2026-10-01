@@ -2,6 +2,25 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.0.0] - 2026-10-02
+
+### Breaking changes
+
+- The package now defines `"exports"`. Only the package root (`json2emap`) can be imported; deep imports such as `json2emap/index.js` are no longer available.
+- Node.js 14 or later is required.
+
+### Added
+
+- ES Modules support (`import json2emap from "json2emap"` / `import { json2emap } from "json2emap"`).
+- `defaultResolveType` is exported.
+- `Options` / `ResolveTypeFunc` types (`IOption` is kept as a deprecated alias).
+
+### Changed
+
+- Rewritten in TypeScript.
+- Conversion runs in linear time.
+- The output is identical to 0.2.1.
+
 ## [0.2.1] - 2026-10-01
 
 ### Fixed
@@ -68,6 +87,7 @@ All notable changes to this project are documented in this file.
 
 - Initial release.
 
+[1.0.0]: https://github.com/rheniumNV/json2emap/compare/v0.2.1...v1.0.0
 [0.2.1]: https://github.com/rheniumNV/json2emap/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/rheniumNV/json2emap/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/rheniumNV/json2emap/compare/v0.1.1...v0.1.2

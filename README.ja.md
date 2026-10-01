@@ -7,14 +7,16 @@ Emap は [Resonite](https://resonite.com/) でパースしやすいように設�
 
 ## 使い方
 
-```
+```sh
 npm install json2emap
 ```
 
 サンプル
 
-```
-const json2emap = require("json2emap");
+```js
+import json2emap from "json2emap";
+// 名前付きでも読み込めます: import { json2emap } from "json2emap";
+// CommonJS の場合: const json2emap = require("json2emap");
 
 console.log(json2emap([1, 2, 3]));
 
@@ -30,11 +32,13 @@ console.log(
 
 Output
 
-```
+```text
 l$#4$#v$#k0$#length$#v0$#3$#t0$#number$#k1$#_0_$#v1$#1$#t1$#number$#k2$#_1_$#v2$#2$#t2$#number$#k3$#_2_$#v3$#3$#t3$#number$#
 l$#3$#v$#k0$#a$#v0$#123$#t0$#number$#k1$#b$#v1$#Hello$#t1$#string$#k2$#c$#v2$#World$#t2$#string$#
 l$#6$#v$#k0$#a.length$#v0$#2$#t0$#number$#k1$#a_0_$#v1$#Hello$#t1$#string$#k2$#a_1_$#v2$#World$#t2$#string$#k3$#b.length$#v3$#1$#t3$#number$#k4$#b_0_.c$#v4$#1$#t4$#number$#k5$#b_0_.d$#v5$#2$#t5$#number$#
 ```
+
+TypeScript の型定義も同梱しています。
 
 ## オプション
 
@@ -52,6 +56,20 @@ json2emap(
 // l$#3$#v$#k0$#a$#v0$#1.5$#t0$#float$#k1$#b.length$#v1$#1$#t1$#number$#k2$#b_0_$#v2$#1$#t2$#float$#
 ```
 
+デフォルトの判定関数は `defaultResolveType` として公開されているので、拡張して使えます。
+
+```js
+import json2emap, { defaultResolveType } from "json2emap";
+
+json2emap(
+  { createdAt: new Date() },
+  {
+    resolveTypeFunc: (v) =>
+      v instanceof Date ? "dateTime" : defaultResolveType(v),
+  }
+);
+```
+
 ## 注意事項
 
 - 空のオブジェクトは何も出力しません（`{ a: {} }` → `l$#0$#v$#`）。空の配列は `length`（`0`）のみ出力します。
@@ -59,36 +77,64 @@ json2emap(
 - JSON でない値（`Date`、`Map`、`BigInt` など）は `String()` で文字列化され、型は `any` になります。`undefined` は空文字、`null` は `"null"`（型 `any`）になります。
 - ルートにプリミティブ値を渡した場合（例: `json2emap(5)`）は、キーが空文字の 1 エントリになります。
 
+## v0.x からの移行
+
+- 出力される Emap 文字列は 0.2.1 と同じなので、Resonite 側の変更は不要です。
+- `require("json2emap")` はこれまでどおり関数を返すため、CommonJS のコードはそのまま動きます。
+- ES Modules（`import json2emap from "json2emap"` / `import { json2emap } from "json2emap"`）に対応しました。
+- パッケージのルート以外は読み込めなくなりました。`require("json2emap/index.js")` のようにファイルを直接指定していた場合は、`require("json2emap")` に変更してください。
+- TypeScript: オプションの型名が `Options` になりました。`IOption` も引き続き使えますが、非推奨です。
+- デフォルトの型判定関数を `defaultResolveType` として公開しました。
+
+古いバージョンを含む変更の一覧は [CHANGELOG.md](CHANGELOG.md) を参照してください。
+
 ## Resonite での Emap の使い方
 
-Emap 文字列の Resonite 内での利用方法は主に 2 種類あります。
-DynamicVariable を利用するほうが機械的に処理できるためおすすめです。
+Emap 文字列の Resonite 内での利用方法は主に 3 種類あります。
+基本的には Dictionary を利用する方法が効率的で機械的に処理できるためおすすめです。
+参照したい値がごく一部でキーが分かっている場合は文字列から直接抽出する方法もあります。
 
-- DynamicVariable を利用する
-- 文字列から直接取り出す
+- 全てを Dictionary に書きこんでから利用する
+- 【非推奨】全てを DynamicVariable に書きこんでから利用する
+- 文字列から特定のキーの内容を直接取り出す
 
 パブリックフォルダにサンプルが置いてあります。
 （以下のリンクを Resonite 内でペーストするとパブリックフォルダとして出てきます。）
 
 > resrec:///G-Shared-Project-rheni/R-166bcbdf-331a-4abc-9f27-8604bbf0de47
 
-### DynamicVariable を利用する
+※ 0.2.0 未満のバージョンで生成した Emap 文字列は Key と Value の順番が異なるため、最新のパーサーでは読み込めません。
+その場合は DynamicVariable を利用する方法のみ使えます。旧バージョン用のパーサーはパブリックフォルダ内の `/Legacy` に入っています。
+可能であれば json2emap を最新バージョンに更新することをおすすめします。
+
+### Dictionary を利用する
+
+Dictionary への書き込み
+
+![Emap 文字列を Dictionary に書き込む ProtoFlux](doc/images/emap_to_dictionary.png)
+
+Dictionary からの読み込み
+
+![Dictionary からキーを指定して値を読み込む ProtoFlux](doc/images/read_from_dictionary.png)
+
+### 【非推奨】DynamicVariable を利用する
+
+Dictionary に比べてパフォーマンスが劣るため、現在は非推奨です。
+Resonite に Dictionary が実装されるまでは主流のやり方でした。
 
 DynamicVariable への書き込み
 
-![](https://user-images.githubusercontent.com/71165146/154020472-0fe7b6f9-b11b-4a4e-969d-84f5943b1747.jpg)
+![Emap 文字列を DynamicVariable に書き込む ProtoFlux](doc/images/emap_to_dynamic_variable.png)
 
 DynamicVariable からの読み込み
 
-![](https://user-images.githubusercontent.com/71165146/154020790-ff6c175a-3e4c-4525-8807-57138b891b13.jpg)
+![DynamicVariable から値を読み込む ProtoFlux](doc/images/read_from_dynamic_variable.png)
 
 ### 文字列から直接取り出す
 
 キーを元に特定の値とその型を取得できます。
 
-![image](https://user-images.githubusercontent.com/71165146/155488876-96c1a261-b3c8-48f4-b50f-91d36132c11d.png)
-
-※0.2.0 よりも古いバージョンの Emap 文字列では Key と Value の順番が違うためこの方法では読み込めません。
+![Emap 文字列からキーを指定して値を直接取り出す ProtoFlux](doc/images/read_directly.png)
 
 ## Json から Emap に変換される手順
 
